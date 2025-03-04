@@ -1,2 +1,2 @@
-cp ~/etc/services .
-cat services
+cp /etc/services file
+cat file
