@@ -1,1 +1,1 @@
-ln ~/etc/services passwd_symlink
+ln -s ~/etc/services passwd_symlink
