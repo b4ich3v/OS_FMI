@@ -19,7 +19,7 @@ done < $tempFile
 
 
 for ((i=0;i<index;i++)) do
-  for((j=0;j<index;j++)) do
+  for ((j=0;j<index;j++)) do
     if [[ "${linesOriginalArr[j]}" == *"${newArr[i]}"* ]]; then
 	    echo "${linesOriginalArr[j]}"
 	  fi
