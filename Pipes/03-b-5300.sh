@@ -16,8 +16,7 @@ while read -r line; do
 
   for key in "${!unorderedMap[@]}"; do
     if [ "${unorderedMap["${key}"]}" -eq 1 ]; then
-      echo "${line}"
-      echo ' ' has "${key}" as uniqe symbol
+      echo "$line has '$key' as unique symbol"
     fi
   done
 done < "${tempFile}"
