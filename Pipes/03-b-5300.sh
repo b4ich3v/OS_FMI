@@ -1,7 +1,7 @@
 #!/bin/bash
 
 tempFile=$(mktemp)
-cat /etc/passwd | cut -d ':' -f 5 | tr -s ',' ' ' | cut -d ' ' -f 1,2 1> "${tempFile}"
+cat /etc/passwd | cut -d ':' -f 5 | tr -s ',' ' ' | cut -d ' ' -f 1,2 > "${tempFile}"
 
 while read -r line; do
   size="${#line}"
