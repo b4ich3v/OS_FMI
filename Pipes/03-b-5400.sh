@@ -1,2 +1,2 @@
 #!/bin/bash
-cat /etc/passwd | grep -E "*ов" -v
+cat /etc/passwd | grep -E "*ов*" -v
