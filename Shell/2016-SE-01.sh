@@ -2,11 +2,6 @@
 
 read -p : inputD
 
-if [ "$#" -ne 1 ]; then
-    echo "Error"
-    exit 1
-fi
-
 tempFile=$(mktemp)
 find . -type d > "${tempFile}"
 found=0
