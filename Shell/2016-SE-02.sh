@@ -23,8 +23,9 @@ while read -r line; do
             else
                 echo "User ${currentUser}: total RSS ${currentSum} <= ${argument}"
             fi
+
         currentSum=0
-        currentUser=""
+        currentUser="${newCurrentUser}"
 
     fi
 
