@@ -13,7 +13,7 @@ while read -r line; do
         echo "${line}"
     fi
 
-    if sudo -u "${user}" -r "${dir}"; then
+    if ! sudo -u "${user}" -w "${dir}"; then
         echo "${line}"
     fi
 
