@@ -8,7 +8,7 @@ if echo "${number1}" | grep -E "[-][1-9][0-9]*"; then
     exit 1
 fi
 
-if echo "${number1}" | grep -E "[-][1-9][0-9]*"; then
+if echo "${number2}" | grep -E "[-][1-9][0-9]*"; then
     echo "Negative number"
     exit 1
 fi
