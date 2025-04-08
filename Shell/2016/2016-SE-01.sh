@@ -11,4 +11,4 @@ if [ ! -d $1 ]; then
 fi
 
 dir=$1
-find "${dir}" -type l -exec test ! -e {} print ';'
+find "${dir}" -type l -exec test ! -e {} ';' -print
