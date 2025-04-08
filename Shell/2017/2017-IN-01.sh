@@ -21,8 +21,8 @@ tempFile3=$(mktemp)
 sortedTempFile1=$(mktemp)
 sortedTempFile2=$(mktemp)
 
-cat "${file}" | grep -E "${target1}=" | cut -d '=' -f 2 > "${tempFile1}"
-cat "${file}" | grep -E "${target2}=" | cut -d '=' -f 2 > "${tempFile2}"
+cat "${file}" | grep -E "^${target1}=" | cut -d '=' -f 2 > "${tempFile1}"
+cat "${file}" | grep -E "^${target2}=" | cut -d '=' -f 2 > "${tempFile2}"
 sed -i "s# #\\n#g" "${tempFile1}"
 sed -i "s# #\\n#g" "${tempFile2}"
 
@@ -32,7 +32,7 @@ sort "${tempFile2}" > "${sortedTempFile2}"
 comm -13 "${sortedTempFile1}" "${sortedTempFile2}" > "${tempFile3}"
 sed -i "s#\\n# #g" "${tempFile3}"
 value=$(cat "${tempFile3}")
-sed -i -E "s#${target2}=.*#${target2}=${value}#" "${file}"
+sed -i -E "s#^${target2}=.*#${target2}=${value}#" "${file}"
 
 rm -r "${tempFile3}"
 rm -r "${sortedTempFile1}"
