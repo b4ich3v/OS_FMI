@@ -1,14 +1,14 @@
 #!/bin/bash
 
 fileWithUsernamesAndDirs=$(mktemp)
-cat /etc/passwd | tr ',' ' ' | awk -F ':' '{print $1" "$6" "defaultKey}' > "${fileWithUsernamesAndDirs}"
+cat /etc/passwd | tr ',' ' ' | awk -F ':' '{print $1" "$6" defaultKey"}' > "${fileWithUsernamesAndDirs}"
 
 while read -r line; do
     currentUser=$(echo "${line}" | awk -F ' ' '{print $1}')
     currentDir=$(echo "${line}" | awk -F ' ' '{print $2}')
 
     filesPerUser=$(mktemp)
-    find "${currentDir}" -type f > "${filesPerUser}"
+    find "${currentDir}" -type f 2>/dev/null > "${filesPerUser}"
     bestSeconds=0
 
     while read -r currentFile; do
