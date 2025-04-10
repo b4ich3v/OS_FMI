@@ -1,8 +1,7 @@
 #!/bin/bash
 
-defaultKey="BRO"
 fileWithUsernamesAndDirs=$(mktemp)
-cat /etc/passwd | tr ',' ' ' | awk -F ':' '{print $1" "$6" "${defaultKey}"}' > "${fileWithUsernamesAndDirs}"
+cat /etc/passwd | tr ',' ' ' | awk -F ':' '{print $1" "$6" "defaultKey}' > "${fileWithUsernamesAndDirs}"
 
 while read -r line; do
     currentUser=$(echo "${line}" | awk -F ' ' '{print $1}')
@@ -16,7 +15,7 @@ while read -r line; do
         timeInSecondsPerFile=$(stat -c %Y "${currentFile}")
 
         if [ "${timeInSecondsPerFile}" -gt "${bestSeconds}" ]; then
-            sed -i "/^${currentUser}/ s/${defaultKey}/${timeInSecondsPerFile}/" "${fileWithUsernamesAndDirs}"
+            sed -i "/^${currentUser}/ s/defaultKey/${timeInSecondsPerFile}/" "${fileWithUsernamesAndDirs}"
             bestSeconds="${timeInSecondsPerFile}"
         fi
     done < "${filesPerUser}"
