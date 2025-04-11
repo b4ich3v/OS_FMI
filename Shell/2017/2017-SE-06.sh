@@ -26,7 +26,7 @@ while read -r currentLine; do
 done < "${infoFile}"
 
 dataFile=$(mktemp)
-ps -e -o uid,pid,rss | tr -s ' ' | sort -n -t ' ' -k -f 2 | tail -n +2 > "${dataFile}"
+ps -e -o uid,pid,rss | tr -s ' ' | sort -n -t ' ' -k -f 1 | tail -n +2 > "${dataFile}"
 prevUser=$(head -n 1 "${dataFile}" | cut -d ' ' -f 1)
 counterForRSS=0
 rootRSS=0
@@ -36,7 +36,7 @@ while read -r currentLine; do
     currentRSS=$(echo "${currentLine}" | cut -d ' ' -f 3)
 
     if [ "${currentUser}" -eq 0 ]; then
-        counterForRSS=$(( counterForRSS + currentRSS ))
+        rootRSS=$(( rootRSS + currentRSS ))
     fi
 
 done < "${fileData}"
