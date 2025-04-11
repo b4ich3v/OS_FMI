@@ -24,7 +24,7 @@ while read -r currentResultLine; do
     second=$(echo "${currentVersion}" | cut -d ' ' -f 2)
     third=$(echo "${currentVersion}" | cut -d ' ' -f 3)
     currentVersionMask=$(( first * 100 + second * 10 + third ))
-    sed -i "/${currentResultLine}/ s/defaultKey/${currentVersionMask}/"
+    sed -i "/${currentResultLine}/ s/defaultKey/${currentVersionMask}/" "${fileWithPotentialResults}"
 
 done < "${fileWithPotentialResults}"
 
