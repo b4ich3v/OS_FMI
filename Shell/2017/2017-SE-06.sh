@@ -16,11 +16,11 @@ while read -r currentLine; do
     currentHomeDir=$(echo "${currentLine}" | awk -F ':' '{print $6}')
 
     if [ "$(stat -c %U "${currentHomeDir}")" == "${currentUser}" ]; then
-        echo "${currentLine}" | awk -F ' ' '{print $1}' >> "${resultUsers}"
+        echo "${currentLine}" | awk -F ':' '{print $1}' >> "${resultUsers}"
     fi
 
     if ! sudo -u "${currentUser}" -w "${currentHomeDir}"; then
-        echo "${currentLine}" | awk -F ' ' '{print $1}' >> "${resultUsers}"
+        echo "${currentLine}" | awk -F ':' '{print $1}' >> "${resultUsers}"
     fi
 
 done < "${infoFile}"
@@ -60,7 +60,6 @@ while read -r currentLine; do
         else
             counterForRSS=$(( counterForRSS + currentRSS ))
         fi
-
     fi
 
 done < "${dataFile}"
