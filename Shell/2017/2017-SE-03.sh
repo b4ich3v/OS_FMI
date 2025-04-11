@@ -41,7 +41,7 @@ sortedUsersAndRSS=$(mktemp)
 cat "${resultFile}" | sort -n -t ' ' -k 2 -r > "${sortedUsersAndRSS}"
 ps aux | awk -F ' ' '{print $1" "$2}' > "${fileWithUserAndPID}"
 
-targetUserLine=$(cat "${sortedUsersAndRss}" | head -n 1)
+targetUserLine=$(cat "${sortedUsersAndRSS}" | head -n 1)
 targetUser=$(echo "${targetUserLine}" | cut -d ' ' -f 1)
 targetRSS=$(echo "${targetUserLine}" | cut -d ' ' -f 2)
 
