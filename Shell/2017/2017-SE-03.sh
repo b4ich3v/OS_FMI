@@ -18,11 +18,11 @@ while read -r currentUserAndProccess; do
     currentProccessRSS=$(echo "${currentUserAndProccess}" | cut -d ' ' -f 2)
 
     if [ "${currentUser}" != "${prevUser}" ]; then
-        sed -i "/^${prevUser}/" s/defaultKey/${counterForRSS}/ "${resultFile}" 
+        sed -i "/^${prevUser}/ s/defaultKey/${counterForRSS}/" "${resultFile}"
         prevUser="${currentUser}"
         counterForRSS="${currentProccessRSS}"
     else
-        counter=$(( counter + currentProccessRSS ))
+        counterForRSS=$(( counterForRSS + currentProccessRSS ))
     fi
 
 done < "${fileWithUsersAndProccesses}"
@@ -44,8 +44,9 @@ ps aux | awk -F ' ' '{print $1" "$2}' > "${fileWithUserAndPID}"
 targetUserLine=$(cat "${sortedUsersAndRSS}" | head -n 1)
 targetUser=$(echo "${targetUserLine}" | cut -d ' ' -f 1)
 targetRSS=$(echo "${targetUserLine}" | cut -d ' ' -f 2)
+fictiveVar=$(( 2 * avarageRSS ))
 
-if [ "${targetRSS}" -gt "${avarageRSS}" ]; then
+if [ "${targetRSS}" -gt "${fictiveVar}" ]; then
     targetPID=$(cat "${fileWithUserAndPID}" | grep -E "${targetUser}" | awk -F ' ' '{print $2}')
     kill "${targetPID}"
 fi
