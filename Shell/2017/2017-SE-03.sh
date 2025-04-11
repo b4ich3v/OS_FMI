@@ -27,6 +27,31 @@ while read -r currentUserAndProccess; do
 
 done < "${fileWithUsersAndProccesses}"
 
+countOfAllRSS=0
+
+while read -r currentUserAndRSS; do
+    currentRSS=$(echo "${currentUserAndRSS}" | cut -d ' ' -f 2)
+    countOfAllRSS=$(( countOfAllRSS + currentRSS ))
+done < "${resultFile}"
+
+countOfUsers=$(cat "${resultFile}" | wc -l)
+avarageRSS=$(( countOfAllRSS / countOfUsers ))
+fileWithUserAndPID=$(mktemp)
+sortedUsersAndRSS=$(mktemp)
+cat "${resultFile}" | sort -n -t ' ' -k 2 -r > "${sortedUsersAndRSS}"
+ps aux | awk -F ' ' '{print $1" "$2}' > "${fileWithUserAndPID}"
+
+targetUserLine=$(cat "${sortedUsersAndRss}" | head -n 1)
+targetUser=$(echo "${targetUserLine}" | cut -d ' ' -f 1)
+targetRSS=$(echo "${targetUserLine}" | cut -d ' ' -f 2)
+
+if [ "${targetRSS}" -gt "${avarageRSS}" ]; then
+    targetPID=$(cat "${fileWithUserAndPID}" | grep -E "${targetUser}" | awk -F ' ' '{print $2}')
+    kill "${targetPID}"
+fi
+
 cat "${resultFile}"
+rm -r "${sortedUsersAndRSS}"
+rm -r "${fileWithUserAndPID}"
 rm -r "${fileWithUsersAndProccesses}"
 rm -r "${resultFile}"
