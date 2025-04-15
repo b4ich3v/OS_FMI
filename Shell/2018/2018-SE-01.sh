@@ -22,7 +22,7 @@ fileWithAccountsAndAllFiles=$(mktemp)
 fileWithAccountsAndValidFiles=$(mktemp)
 inputDir=$1
 
-find "${inputDir}" -type f | awk -F '/' '{print $(NF-1)" "$(NF)}' "${fileWithAccountsAndAllFiles}"
+find "${inputDir}" -type f | awk -F '/' '{print $(NF-1)" "$(NF)}' > "${fileWithAccountsAndAllFiles}"
 
 # seperate valid accounts from all accounts
 while read -r currentAccAndFilePath; do
@@ -45,11 +45,11 @@ while read -r currentAccAndFilePath; do
 
     if grep -E "${currentAcc}" "${fileWithAccountsAndValidFiles}"; then
         if echo "${currentFilePath}" | grep -E "${finalSearchingPattern}"; then
-            countOfLinesInCurrentFile=$(wc -l "${currentFilePath}")
+            countOfLinesInCurrentFile=$(wc -l < "${currentFilePath}")
             currentCountOfLinesInResultFile=$(cat "${fileWithAccountsAndValidFiles}" | grep -E "${currentAcc}" | cut -d ' ' -f 2)
             newCountOfLines=$(( currentCountOfLinesInResultFile + countOfLinesInCurrentFile ))
 
-            sed -i "/s/^[0-9][0-9]*$/${newCountOfLines}/" "${fileWithAccountsAndValidFiles}" 
+            sed -i "s/^${currentAcc} [0-9]\+/${currentAcc} ${newCountOfLines}/" "${fileWithAccountsAndValidFiles}"
 
         fi
     fi
