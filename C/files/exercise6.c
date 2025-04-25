@@ -18,13 +18,21 @@ int main(int argc, const char* argv[])
 
     char buffer[1024];
 
-    for (int i = 1; i < argc; i++)
+    for (int i = 1; i <= argc; i++)
     {
         
         int sourceFd = open(argv[i], O_RDONLY);
         int readBytes = 0;
 
-        if((readBytes = read(sourceFd, buffer, 1024)) < 0 || sourceFd < 0)
+        if (sourceFd < 0) 
+        {
+
+            write(1, "Error\n", strlen("Error\n"));
+            exit(1);
+
+        }
+
+        if((readBytes = read(sourceFd, buffer, 1024)) < 0)
         {
 
             close(sourceFd);
