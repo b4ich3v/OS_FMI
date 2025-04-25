@@ -5,13 +5,6 @@
 #include "unistd.h" 
 #include "fcntl.h" 
 
-void freeBuffer(char* ptr)
-{
-
-    ptr[0] = '\0';
-
-}
-
 int main(int argc, const char* argv[])
 {
 
@@ -24,14 +17,23 @@ int main(int argc, const char* argv[])
     }
 
     int fileFd = open(argv[1], O_RDONLY);
+
+    if(fileFd < 0)
+    {
+
+        perror("Error");
+        exit(1);
+
+    }
+
     int currentStatus = 0;
     char readVariable = 'a';
     int counterForEndlines = 0;
 
-    char buffer[1024];
+    char buffer[10000];
     int bufferIndex = 0;
 
-    while((currentStatus = read(fileFd, &readVariable, sizeof(char)) > 0))
+    while((currentStatus = read(fileFd, &readVariable, sizeof(char))) > 0)
     {
 
         if(counterForEndlines == 10) break;
@@ -41,7 +43,7 @@ int main(int argc, const char* argv[])
             counterForEndlines += 1;
             buffer[bufferIndex] = '\0';
             write(1, buffer, strlen(buffer) * sizeof(char));
-            freeBuffer(buffer);
+            write(1, "\n", 1);
             bufferIndex = 0;
 
         }else
@@ -54,6 +56,9 @@ int main(int argc, const char* argv[])
 
     }
 
+    if (currentStatus < 0) perror("Error");
+
+    close(fileFd);
     return 0;
 
 }
