@@ -73,7 +73,7 @@ int main(int argc, const char* argv[])
 
         uint32_t value = 0;
 
-        for (int i = 0; i < pair.number2; i++)
+        for (int j = 0; j < pair.number2; j++)
         {
             
             if(read(fd2, &value, sizeof(uint32_t)) < 0) freeMethodErr(fd1, fd2, fd3);
