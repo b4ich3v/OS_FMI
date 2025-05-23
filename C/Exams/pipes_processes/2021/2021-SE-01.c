@@ -13,8 +13,11 @@ int main(int argc, char *argv[])
 
     if(argc != 3) errx(1, "Error");
 
-    int fd = open(argv[1], O_RDONLY);
-    if(fd < 0) errx(1, "Error");
+    int fd1 = open(argv[1], O_RDONLY);
+    if(fd1 < 0) errx(1, "Error");
+
+    int fd2 = open(argv[2], O_RDONLY);
+    if(fd2 < 0) errx(1, "Error");
 
     uint8_t currentByte = 0;
     uint8_t dummyTrash = 0;
@@ -23,7 +26,7 @@ int main(int argc, char *argv[])
     uint8_t helper1 = 0b01;
     uint8_t helper2 = 0b10;
 
-    while((dummyTrash = read(fd, &currentByte, sizeof(uint8_t))) > 0)
+    while((dummyTrash = read(fd1, &currentByte, sizeof(uint8_t))) > 0)
     {
 
         uint16_t reversedMask = 0;
@@ -49,11 +52,11 @@ int main(int argc, char *argv[])
         uint16_t result = 0;
         result |= (reversedMask << 4);
         result |= (reversedMask >> 4);
-        write(1, &result, sizeof(uint16_t));
+        write(fd2, &result, sizeof(uint16_t));
 
     }
     
-    close(fd);
+    close(fd1);
     exit(0);
 
 }
