@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 8; i++)
         {
             
-            if(currentByte & (operatingMaskManipulation < i))
+            if(currentByte & (operatingMaskManipulation << i))
             {
 
                 reversedMask |= (helper1 << (2 * i));
