@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     int fd1 = open(argv[1], O_RDONLY);
     if(fd1 < 0) errx(1, "Error");
 
-    int fd2 = open(argv[2], O_RDONLY);
+    int fd2 = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
     if(fd2 < 0) errx(1, "Error");
 
     uint8_t currentByte = 0;
