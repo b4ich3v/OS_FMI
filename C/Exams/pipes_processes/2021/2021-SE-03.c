@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
     int fd2 = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
     if(fd2 < 0) errx(1, "Error");
 
-    int sizeOfFile = 0;
-    uint8_t currentByte = 0;
+    int countOfNumbers = 0;
+    uint16_t currentNumber = 0;
 
-    while((read(fd1, &currentByte, sizeof(uint8_t))) > 0)
+    while((read(fd1, &currentNumber, sizeof(uint16_t))) > 0)
     {
 
-        sizeOfFile += 1;
+        countOfNumbers += 1;
 
     }
 
@@ -37,8 +37,6 @@ int main(int argc, char *argv[])
         err(1, "Error");
 
     }
-
-    int countOfNumbers = sizeOfFile / sizeof(uint16_t);
     
     if(countOfNumbers > 524288)
     {
@@ -52,10 +50,10 @@ int main(int argc, char *argv[])
     uint16_t* array = malloc(countOfNumbers * sizeof(uint16_t));
     int index = 0;
 
-    while((read(fd1, &currentByte, sizeof(uint8_t))) > 0)
+    while((read(fd1, &currentNumber, sizeof(uint16_t))) > 0)
     {
 
-        array[index] = currentByte;
+        array[index] = currentNumber;
         index += 1;
 
     }
@@ -67,7 +65,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < countOfNumbers; i++) 
     {
 
-        dprintf(fd2, "0x%04x", array[i]);
+        dprintf(fd2, "%d", array[i]);
         if (i < countOfNumbers - 1) dprintf(fd2, ",");
 
         if ((i + 1) % 8 == 0) dprintf(fd2, "\n");
