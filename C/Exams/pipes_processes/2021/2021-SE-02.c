@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
     if(fd2 < 0) errx(1, "Error");
     
     uint8_t currentByte = 0;
-    uint8_t mask1 = 0b10;
-    uint8_t mask2 = 0b01;
 
     while(read(fd1, &currentByte, sizeof(uint8_t)) > 0)
     {
@@ -31,26 +29,22 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 8; i++)
         {
             
-            if(currentByte & (1 << i))
+            if(currentByte & (1 << (7 - i)))
             {
 
-                currentTwoBytesMask |= (mask1 << (2 * i));
+                currentTwoBytesMask |= (0b10 << (2 * i));
 
             }
             else
             {
             
-                currentTwoBytesMask |= (mask2 << (2 * i));
+                currentTwoBytesMask |= (0b01 << (2 * i));
 
             }
 
         }
-        
-        uint16_t result = 0;
-        result |= (currentTwoBytesMask >> 4);
-        result |= (currentTwoBytesMask << 4);
 
-        write(fd2, &result, sizeof(uint8_t));
+        write(fd2, &currentTwoBytesMask, sizeof(uint16_t));
 
     }
 
