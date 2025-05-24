@@ -68,9 +68,9 @@ int main(int argc, char *argv[])
 
         }
 
-        if (prevFd != -1) close(prevFd); 
+        if(prevFd != -1) close(prevFd); 
 
-        if (i != countOfCommands - 1) 
+        if(i != countOfCommands - 1) 
         {
 
             close(sharedData[1]); 
