@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         if(i != countOfCommands - 1)
         {
 
-            if( pipe(sharedData) < 0) err(1, "Error");
+            if(pipe(sharedData) < 0) err(1, "Error");
 
         }
 
