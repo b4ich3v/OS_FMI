@@ -54,32 +54,25 @@ int main(int argc, char *argv[])
 
     }
 
-    int status = 0;
-    wait(&status);
-    if(WIFEXITED(status) || WEXITSTATUS(status) != 0) 
-    {
-
-        close(sharedData[0]);
-        close(sharedData[1]);
-        close(fd);
-        err(1, "Error");
-
-    }
-
-    wait(&status);
-    if(WIFEXITED(status) || WEXITSTATUS(status) != 0) 
-    {
-
-        close(sharedData[0]);
-        close(sharedData[1]);
-        close(fd);
-        err(1, "Error");
-
-    }
-
     close(sharedData[0]);
     close(sharedData[1]);
     close(fd);
+
+    int status = 0;
+
+    for (int i = 0; i < 2; i++) 
+    {
+
+        if (wait(&status) < 0) err(1, "wait");
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+        {
+
+            errx(1, "Child process failed");
+
+        }
+
+    }
+
     exit(0);
 
 }
