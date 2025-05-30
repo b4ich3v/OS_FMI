@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
             nextByte ^= xorOperator;
 
             write(writingFd, &nextByte, sizeof(uint8_t));
-            break;
 
         }
         else
