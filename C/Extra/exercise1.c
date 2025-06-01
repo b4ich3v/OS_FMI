@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) 
 {
 
-    if(argc != 3) errx(1, "Error")
+    if(argc != 3) errx(1, "Error");
 
     int counter = 0;
     const char terminatingSymbol = '$';
