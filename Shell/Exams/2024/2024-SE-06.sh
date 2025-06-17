@@ -10,19 +10,21 @@ while IFS= read -r line; do
         continue
     fi
 
-    name=$1
-    type=$2
+    name=$(echo "$line" | cut -d ' ' -f 1)
+    type=$(echo "$line" | cut -d ' ' -f 2)
+    perms=""
+    usergroup=""
 
     if [ "$type" = "file" ] || [ "$type" = "dir" ]; then
-        if echo "$3" | grep -q ':'; then
-            usergroup=$3
-            perms=$4
+        if echo "$(echo "$line" | cut -d ' ' -f 3)" | grep -q ':'; then
+            usergroup=$(echo "$line" | cut -d ' ' -f 3)
+            perms=$(echo "$line" | cut -d ' ' -f 4)
         else
             usergroup=""
-            perms=$3
+            perms=$(echo "$line" | cut -d ' ' -f 3)
         fi
     elif [ "$type" = "symlink" ]; then
-        target=$3
+        target=$(echo "$line" | cut -d ' ' -f 3)
         usergroup=""
         perms=""
     elif [ "$type" = "nonexistant" ]; then
@@ -78,11 +80,11 @@ while IFS= read -r line; do
     fi
 
     if [ -n "$usergroup" ]; then
-        chown "$usergroup" "$name" 2>/dev/null || echo "Failed chown $name to $usergroup"
+        chown "$usergroup" "$name" 2>/dev/null 
     fi
 
     if [ -n "$perms" ]; then
-        chmod "$perms" "$name" 2>/dev/null || echo "Failed chmod $name to $perms"
+        chmod "$perms" "$name" 2>/dev/null 
     fi
 
 done < "$1"
