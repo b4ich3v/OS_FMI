@@ -18,7 +18,7 @@ done
 if [ ! -f "$target" ]; then
     eval "$command"
 else
-    echo "$rules" | while IFS=' ' read -r currentRule; do
+    echo "$rules" | tr -s ' ' '\n' | while IFS= read -r currentRule; do
         if [[ "$(stat -c %Y "$currentRule")" -lt "$(stat -c %Y "$currentFile")" ]]; then
             eval "$command"
             break;
