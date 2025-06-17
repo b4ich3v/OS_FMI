@@ -4,7 +4,7 @@ files=$(mktemp)
 hashTable=$(mktemp)
 
 printf "%s\n" "$@" | while IFS= read -r currentArgument; do
-    if echo "$currentArgument" | grepe -E -q "^-R[a-zA-Z0-9]+=[a-zA-Z0-9]+$"; then
+    if echo "$currentArgument" | grep -E -q "^-R[a-zA-Z0-9]+=[a-zA-Z0-9]+$"; then
         key=$(echo "$currentArgument" | sed -E "s/-R//" | cut -d '=' -f 1)
         value=$(echo "$currentArgument" | sed -E "s/-R//" | cut -d '=' -f 2)
         echo "$key $value" >> "$hashTable"
