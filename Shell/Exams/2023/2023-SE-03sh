@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo Error
+    exit 1
+fi
+
+allFiles=$(mktemp)
+find "$1" -type f > "$allFiles"
+hashTable=$(mktemp)
+
+target=$(cat "$allFiles" | wc -l)
+target=$((target / 2))
+
+while IFS= read -r currentFile; do
+    tempFile=$(mktemp)
+    cat "$currentFile" | sed 's/ /\n/g' | grep -E "\b[a-z]+\b|\b[a-z]+.\b" | uniq > "$tempFile"
+    
+    while IFS= read -r currentWord; do
+        if cat "$hashTable" | grep -E -q "^$currentWord"; then
+            counter=$(cat "$hashTable" | grep -E "$currentWord" | cut -d ' ' -f 2)
+            counter=$((counter + 1))
+
+            if [[ "$(cat "$currentFile" | sed 's/ /\n/g' | grep -E "\b[a-z]+\b|\b[a-z]+.\b" | grep -E "$currentWord" | wc -l)" -gt 3 ]]; then
+                sed -i "s/^$currentWord [0-9]\+/$currentWord $counter/" "$hashTable"    
+            fi
+            
+        else
+            echo "$currentWord 0" >> "$hashTable"
+        fi
+    done < "$tempFile"
+
+    rm -r "$tempFile"
+done < "$allFiles"
+
+sort -k 2 -n -r "$hashTable" -o "$hashTable"
+head -n 10 "$hashTable" | awk -v varTarget="$target" '{
+    for(i=1;i<NF;i++){
+        n=split($i,array,' ');
+
+        if(array[1] > varTarget){
+            printf("%s\n", array[0]);
+        }
+    }
+}'
+
+rm -r "$allFiles"
+rm -r "$hashTable"
