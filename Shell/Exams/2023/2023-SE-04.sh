@@ -20,7 +20,7 @@ while IFS= read -r currentFileName1; do
         hash2=$(md5sum "$currentFileName2" | cut -d ' ' -f 1)
 
         if [[ "$hash1" == "$hash2" ]]; then
-            counter=$((counter + "$(stat -c %s "$currentFileName1")"))
+            counter=$((counter + "$(stat -c %s "$currentFileName2")"))
             rm -r "$currentFileName2"
             ln -s "$currentFileName1" "$currentFileName2"
             echo "$currentFileName1 $currentFileName2" >> "$duplicatedFiles"
