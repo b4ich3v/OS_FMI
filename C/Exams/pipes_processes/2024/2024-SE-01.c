@@ -56,7 +56,9 @@ int main(int argc, char *argv[])
 
         }
 
+        close(sharedData[0]);
         if(write(sharedData[1], bytes, randomNumber) < 0) err(1, "Error");
+        close(sharedData[1]);
 
         int status = 0;
         if(wait(&status) < 0) err(1, "Error");
