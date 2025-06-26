@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
     Header header;
 
     if(read(fd, &header, sizeof(Header)) < 0) err(1, "Error");
+    if(header.magic != 0x6963) err(1, "Error");
+    if(header.ver != 0x6e73) err(1, "Error");
     if(lseek(fd, header.cp * sizeof(Preamble), SEEK_CUR) < 0) err(1, "Error");
 
     Object* objects = malloc(header.co * sizeof(Object));
