@@ -1,161 +1,89 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "fcntl.h"  
-#include "string.h"
-#include "unistd.h"
-#include <err.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <err.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <stdbool.h>
+#include <fcntl.h>
+#include <stdint.h>
 
-off_t getFileSize(int fd)
+int main(int argc, char *argv[])
 {
 
-    off_t currentPosition = lseek(fd, 0, SEEK_CUR);
+    if(argc != 2) errx(1, "Error");
 
-    if(currentPosition < 0 )
+    struct stat st;
+    ssize_t sizeOfFile = st.st_size;
+    
+    if(sizeOfFile < 0) errx(1, "Error");
+
+    int readingFd = open(argv[1], O_RDONLY);
+    if(readingFd < 0) errx(1, "Error");
+
+    uint8_t* array = malloc(sizeof(uint8_t) * sizeOfFile);
+    uint8_t currentByte = 0;
+    int8_t fictiveData = 0;
+    ssize_t currentIndex = 0;
+
+    while((fictiveData = read(readingFd, &currentByte, sizeof(uint8_t))) > 0)
     {
 
-        write(2, "Error");
-        exit(1);
-        close(fd);
+        if(fictiveData < 0)
+        {
+
+            close(readingFd);
+            free(array);
+            err(1, "Error");
+
+        }
+
+        array[currentIndex] = currentByte;
+        currentIndex += 1;
 
     }
 
-    off_t result = lseek(fd, 0, SEEK_END);
+    close(readingFd);
 
-    if(result < 0 )
+    int writingFd = open(argv[1], O_WRONLY | O_TRUNC | 0644);
+    if(writingFd < 0) 
     {
 
-        write(2, "Error");
-        exit(1);
-        close(fd);
+        free(array);
+        err(1, "Error");
 
     }
 
-    if(lseek(fd, currentPosition, SEEK_SET) < 0 )
-    {
-
-        write(2, "Error");
-        exit(1);
-        close(fd);
-
-    }
-
-    return result;
-
-}
-
-void swap(char* c1, char* c2)
-{
-
-    char temp  = *c1;
-    *c1 = *c2;
-    *c2 = temp;
-
-}
-
-void bubbleSort(char* data, int size)
-{
-
-    for (int i = 0; i < size - 1; i++)
+    for (int i = 0; i < sizeOfFile - 1; i++)
     {
         
-        for (int j = 0; j < size - i - 1; j++)
+        for (int j = 0; j < sizeOfFile - j - 1; j++)
         {
             
-            if(data[j] > data[j + 1])
+            if(array[j] < array[j + 1])
             {
 
-                swap(&data[j], &data[j + 1]);
+                uint8_t temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
 
             }
 
         }
-
-    }
-
-}
-
-int main(int argc, const char* argv[])
-{
-
-    if(argc != 2)
-    {
-
-        errx(2, "Error");
-        exit(1);
-
-    }
-
-    int fd = open(argv[1], O_RDWR);
-
-    if(fd < 0)
-    {
-
-        write(2, "Error");
-        exit(1);
-
-    }
-
-    off_t fileSize = getFileSize(fd); 
-    int index = 0;
-    char fictiveByte = 'a';
-    char* data = malloc(fileSize);
-    ssize_t bytesRead = 0;
-
-    while((bytesRead = read(fd, &fictiveByte, sizeof(char))) > 0)
-    {
-
-        data[index] = fictiveByte;
-        index += 1;
-
-    }
-
-    if(bytesRead < 0)
-    {
-
-        close(fd);
-        free(data);
-        exit(1);
-
-    }
-
-    bubbleSort(data, (int)fileSize);
-    off_t returnPosition = lseek(fd, 0, SEEK_SET);
-    ssize_t bytesWritten = 0;
-
-    if(returnPosition < 0)
-    {
-
-        close(fd);
-        free(data);
-        exit(1);
-
-    }
-
-    for (int i = 0; i < fileSize; i++)
-    {
         
-        if((bytesWritten = write(fd, &data[i], sizeof(char))) < 0)
-        {
-
-            close(fd);
-            free(data);
-            exit(1);
-
-        }
-
     }
     
-    if(bytesWritten < 0)
+    if(write(writingFd, array, sizeof(uint8_t) * sizeOfFile) < 0)
     {
 
-        close(fd);
-        free(data);
-        exit(1);
+        free(array);
+        err(1, "Error");
 
     }
 
-    close(fd);
-    free(data);
+    close(writingFd);
+    free(array);
     exit(0);
 
 }
