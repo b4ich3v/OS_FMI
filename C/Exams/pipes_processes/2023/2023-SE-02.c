@@ -5,6 +5,7 @@
 #include <err.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <sys/stat.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <stdint.h>
@@ -12,80 +13,89 @@
 int main(int argc, char *argv[])
 {
 
-    bool foundSomeError = false;
-    bool everythingIsOk = false;
-    const char* target = "found it!\n";
+    int countOfCommands = argc - 1;
+    int* pids = malloc(sizeof(int) * countOfCommands);
+    if(!pids) err(1, "Error");
 
-    int sharedData[100][2];
-    int arrayOfPids[100];
-    bool finished[100] = {false};
+    bool found = false;
+    char buffer[1024];
 
-    for (int i = 0; i < argc - 1; i++)
+    for (int i = 1; i <= countOfCommands; i++)
     {
         
-        if(pipe(sharedData[i]) < 0) err(1, "Error");
+        int sharedData[2];
+        if(pipe(sharedData) < 0 ) err(1, "Error");
 
-        pid_t currentPid = fork();
+        int currentPid = fork();
         if(currentPid < 0) err(1, "Error");
 
         if(currentPid == 0)
         {
 
-            close(sharedData[i][0]);
-            dup2(sharedData[i][1], STDOUT_FILENO);
-            close(sharedData[i][1]);
+            close(sharedData[0]);
+            if(dup2(sharedData[1], 1) < 0) err(1, "Error");
+            close(sharedData[1]);
 
-            execlp(argv[i + 1], argv[i + 1], (char*) NULL);
+            execlp(argv[i], argv[i], (char*)NULL);
             err(1, "Error");
 
         }
 
-        arrayOfPids[i] = currentPid;
-        close(sharedData[i][1]);
+        pids[i - 1] = currentPid;
+        close(sharedData[1]);
+        int readBytes = 0;
+        if((readBytes = read(sharedData[0], buffer, sizeof("found it"))) < 0) err(1, "Error");
+        close(sharedData[0]);
+
+        buffer[readBytes] = '\0';
+
+        if (strcmp(buffer, "found it") == 0) found = true;
+        if(found)
+        {
+
+            for (int j = 0; j < countOfCommands; j++)
+            {
+                
+                if(pids[j] > 0)
+                {
+
+                    kill(pids[j], SIGTERM);
+
+                }
+
+            }
+
+            for (int j = 0; j < countOfCommands; j++)
+            {
+                
+                if(waitpid(pids[j], NULL, 0) < 0 ) err(1, "Error");
+
+            }
+
+            free(pids);
+            exit(0);
+
+        }
 
     }
     
-    for (int i = 0; i < argc - 1; i++)
+    for (int i = 0; i < countOfCommands; i++)
     {
         
-        char buffer[1024];
-        int bytesRead = read(sharedData[i][0], buffer, sizeof(buffer) - 1);
-        if (bytesRead < 0) err(1, "Error");
-        buffer[bytesRead] = '\0';
-
-        close(sharedData[i][0]);
-
-        int currentStatus = 0;
-        waitpid(arrayOfPids[i], &currentStatus, 0);
-        finished[i] = true;
-
-        if(!WIFEXITED(currentStatus) || WEXITSTATUS(currentStatus)) foundSomeError = true; 
-        if(!strcmp(target, buffer)) everythingIsOk = true;
-
-    }
-        
-    if(foundSomeError) 
-    {
-
-        for (int i = 0; i < argc - 1; i++)
+        int status = 0;
+        if(waitpid(pids[i], &status, 0) < 0 ) err(1, "Error");
+        if(!WIFEXITED(status))
         {
-            
-            if (!finished[i])
-            {
 
-                kill(arrayOfPids[i], SIGTERM);
-                waitpid(arrayOfPids[i], NULL, 0);
+            free(pids);
+            exit(1);
 
-            }
-            
         }
-
-        exit(26);
+        
 
     }
 
-    if(everythingIsOk) exit(0);
-    else exit(1);
+    free(pids);
+    exit(26);
 
 }
-
