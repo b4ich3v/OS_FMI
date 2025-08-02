@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
 	if(pipe(sharedData)<0) err(1, "Pipe error");
 
 	pid_t pid1 = fork();
-	if(pid1 <0) err(1, "Fork error");
-	if(pid1 ==0)
+	if(pid1 < 0) err(1, "Fork error");
+	if(pid1 == 0)
 	{
 
 		close(sharedData[0]);
@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
 	}
 
 	pid_t pid2 = fork();
-	if(pid2<0) err(1, "Fork error");
-	if(pid2 ==0)
+	if(pid2 < 0) err(1, "Fork error");
+	if(pid2 == 0)
 	{
 
 		close(sharedData[1]);
