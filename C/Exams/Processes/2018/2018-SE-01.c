@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	{
 
 		{"find", argv[1], "-type", "f", "-exec", "stat", "-c", "%Y %n", "{}", ";", NULL},
-		{"sort", "-t", " ", "-k2", "-nr", NULL},
+		{"sort", "-t", " ", "-k1", "-nr", NULL},
 		{"head", "-n", "1", NULL},
 		{"cut", "-d", " ", "-f2", NULL}
 
