@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 			close(sharedData[i][0]);
 
 			char result[1024] = {0};
-			if(snprintf(result, sizeof(result), "%s.hash", buffer) < 0) err(1, "Snprintf");
+			if(snprintf(result, sizeof(result), "%s.hash", buffer) < 0) err(1, "Snprintf error");
 			int writingFd = open(result, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 			if(writingFd < 0) err(1, "Open error");
 			if(dup2(writingFd, 1) < 0) err(1, "Dup2 error");
