@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
 	bool hasNumbers = false;
 	if(!strcmp(argv[1], "-n")) hasNumbers = true;
 
+	int rowIndex = 1;
+
 	for (int i = 1; i < argc; i++)
 	{
 
@@ -28,7 +30,7 @@ int main(int argc, char* argv[])
 			if(readingFd < 0) err(1, "Open error");
 
 			char currentByte = 'a';
-			char buffer[1024] = {0};
+			char buffer[4096] = {0};
 			int index = 0;
 
 			while(read(readingFd, &currentByte, sizeof(char)) > 0)
@@ -44,9 +46,32 @@ int main(int argc, char* argv[])
 			if(hasNumbers)
 			{
 
-				char result[1024] = {0};
-				if(snprintf(result, sizeof(result), "%d %s\n", i - 1, buffer) < 0) err(1, "Snprintf error");
-				if(write(1, result, strlen(result)) < 0) err(1, "Write error");
+				char currentLine[1024] = {0};
+				int indexForLine = 0;
+
+				for (int i = 0; i < index; i++)
+				{
+				
+					if(buffer[i] == '\n')
+					{
+
+						char result[1024] = {0};
+
+						if(snprintf(result, sizeof(result), "%d %s\n", rowIndex, currentLine) < 0) err(1, "Snprintf error");
+						if(write(1, result, strlen(result)) < 0) err(1, "Write error");
+						rowIndex += 1;
+						indexForLine = 0;
+
+					}
+					else
+					{
+
+						currentLine[indexForLine] = buffer[i];
+						indexForLine += 1;
+
+					}
+
+				}
 
 			}
 			else
@@ -99,4 +124,3 @@ int main(int argc, char* argv[])
 	return 0;
 
 }
-
