@@ -8,7 +8,7 @@
 
 #define CHUNK_SIZE 1000000 
 
-void insertion_sort(uint32_t* arr, size_t size) 
+void insertionSort(uint32_t* arr, size_t size) 
 {
 
     for (int i = 1; i < size; i++)
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
         if (bytes < 0) err(1, "Invalid input");
 
         int nums = bytes / sizeof(uint32_t);
-        insertion_sort(buffer, nums);
+        insertionSort(buffer, nums);
 
         ssize_t written = write(writingFd, buffer, nums * sizeof(uint32_t));
 
