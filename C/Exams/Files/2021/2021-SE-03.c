@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	uint16_t currentNumber = 0;
 	struct stat fileStat;
 	if(stat(argv[1], &fileStat) < 0) err(1, "Stat error");
-	int size = fileStat.st_size;
+	int size = fileStat.st_size / sizeof(uint16_t);
 	int index = 0;
 
 	uint16_t* array = malloc(sizeof(uint16_t) * size);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	argBuffer[(int)strlen(argv[1]) + 1] = 'H';
 	argBuffer[(int)strlen(argv[1]) + 2] = '\0';
 
-	if(snprintf(buffer, sizeof(buffer), "#ifndef\n#define %s\n", argBuffer) < 0) err(1, "Snprintf error");
+	if(snprintf(buffer, sizeof(buffer), "#ifndef %s\n#define %s\n", argBuffer, argBuffer) < 0) err(1, "Snprintf error");
 	if(write(writingFd, buffer, strlen(buffer)) < 0) err(1, "Write error");	
 	if(snprintf(buffer, sizeof(buffer), "const uint16_t array[] = {") < 0) err(1, "Snprintf error");
 	if(write(writingFd, buffer, strlen(buffer)) < 0) err(1, "Write error");
