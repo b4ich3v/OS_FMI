@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 			uint8_t currentPair = 0;
 			currentPair = (currentNumber >> (2 * i)) & 3;
 
-			if(currentPair == 0x10)
+			if(currentPair == 2)
 			{
 
 				currentByte |= (1 << i);
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
 		}	
 
-		if(write(writingFd, &currentNumber))
+		if(write(writingFd, &currentNumber, sizeof(uint8_t)) < 0) err(1, "Write error");
 
 	}
 
