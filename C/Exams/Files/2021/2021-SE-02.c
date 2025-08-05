@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
 		}	
 
-		if(write(writingFd, &currentNumber, sizeof(uint8_t)) < 0) err(1, "Write error");
+		if(write(writingFd, &currentByte, sizeof(uint8_t)) < 0) err(1, "Write error");
 
 	}
 
