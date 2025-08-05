@@ -30,13 +30,13 @@ int main(int argc, char* argv[])
 			if(currentByte & (1 << i))
 			{
 			
-				currentNumber |= (0x10 << 2 * (7 - i));						
+				currentNumber |= (2 << 2 * (7 - i));						
 
 			}
 			else
 			{
 
-				currentNumber |= (0x01 << 2 * (7 - i));
+				currentNumber |= (1 << 2 * (7 - i));
 
 			}
 
@@ -52,4 +52,3 @@ int main(int argc, char* argv[])
 	return 0;
 
 }
-
