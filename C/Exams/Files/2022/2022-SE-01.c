@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
 
 	comparatorHeader header1;
 	if(read(comparatorFd, &header1, sizeof(comparatorHeader)) < 0) err(1, "Read error");
+	if(header1.magic1 != 0xAFBC7A37 || header1.magic2 != 0x1C27) err(1, "Invalid input");
 
 	dataHeader header2;
 	if(read(dataFd, &header2, sizeof(dataHeader)) < 0) err(1, "Read error");
