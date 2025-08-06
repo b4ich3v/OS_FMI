@@ -16,6 +16,8 @@ else
 	executingFile="$2"
 fi
 
-cat "$executingFile" | cut -d '-' -f2 | sed -E "s/[\t\r ]//" | sort
+resultFileName="$executingFile.songs"
+touch "$resultFileName"
+cat "$executingFile" | cut -d '-' -f2 | sed -E "s/[\t\r ]//" | sort 1> "$resultFileName"
 
 exit 0
