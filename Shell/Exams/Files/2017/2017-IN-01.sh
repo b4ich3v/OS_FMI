@@ -19,5 +19,5 @@ done < "$tempFile"
 
 
 rm -r "$tempFile"
-
+exit 0
 
