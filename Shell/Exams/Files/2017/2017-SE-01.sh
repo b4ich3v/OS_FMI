@@ -17,4 +17,4 @@ cat "$tempFile1" | sort -t ' ' -k1 -n | cut -d ' ' -f 2
 
 rm -r "$tempFile"
 rm -r "$tempFile1"
-
+exit 0
