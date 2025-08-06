@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# if [ "$(id -u)" -ne 0 ] ; then
-# 	echo "Inalid argument"
-# 	exit 1
-# fi
+if [ "$(id -u)" -ne 0 ] ; then
+	echo "Inalid argument"
+	exit 1
+fi
 
 cat /etc/passwd | awk -F ':' '{
 	found=0
