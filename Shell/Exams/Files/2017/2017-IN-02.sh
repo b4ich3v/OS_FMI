@@ -31,4 +31,4 @@ find "$homeDir" -type f -exec stat -c "%s %n" {} ';' | sort -t ' ' -k2 -n | cut 
 printf "\n"
 find "$homeDir" -type d -exec stat -c "%s %n" {} ';' | sort -t ' ' -k2 -n | cut -d ' ' -f2
 
-exit 1
+exit 0
