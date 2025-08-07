@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$(id -u)" -ne 0 ] || [ "$#" -ne 1 ]; then
+    echo "Wrong number of arguments or invalid data"
+    exit 1
+fi
+
 foo=$1
 countOfFooProcesses=$(ps -eo user | sort | uniq -c | grep -E "$foo" | sed -E "s/[\t\r ]*//" | cut -d ' ' -f 1)
 
