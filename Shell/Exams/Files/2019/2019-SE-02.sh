@@ -1,6 +1,6 @@
 #!/bin/bash
 
-i=0
+i=1
 N=10
 tempFile=$(mktemp)
 
