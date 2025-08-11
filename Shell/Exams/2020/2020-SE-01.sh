@@ -15,7 +15,7 @@ echo "$header" >> "$csv"
 while IFS= read -r currentFileName; do
     hostname=$(echo "$currentFileName" | sed -E "s/\.log//")
     counter=0
-    row="$hostname"  # тук ще трупаме полетата за този хост
+    row="$hostname"  
 
     while IFS= read -r currentLine; do
         if [ "$counter" -eq 9 ]; then
