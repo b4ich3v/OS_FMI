@@ -1,8 +1,0 @@
-sem_init(s1, 0), sem_init(s2, 0)
-
-process P     process Q
-p_1           s1.wait()
-s1.signal()   q_1      
-p_2           q_2
-s2.wait()     s2.signal()
-p_3           q_3
