@@ -1,0 +1,43 @@
+struct Stack(N):
+    buf: Item[N]
+    idx: Uint
+    semaphore m
+    semaphore empty
+    semaphore full
+-------------------------
+init(s: Stack(N)):
+    s.idx := 0
+    m.init(1)
+    empty.init(N)
+    full.init(0)
+-------------------------
+peek(s: Stack(N)) -> Item:
+    m.wait()
+    if s.idx == 0:
+        m.signal()
+        return error
+    m.signal()
+    return s.buf[s.idx - 1]
+-------------------------
+push(s: Stack(N), x: Item):
+    empty.wait()
+    m.wait()
+    if s.idx >= N:
+        m.signal()
+        return error
+    s.buf[s.idx] := x
+    s.idx += 1
+    m.signal()
+    full.signal()
+-------------------------
+pop(s: Stack(N)) -> Item:
+    full.wait()
+    m.wait()
+    if s.idx == 0:
+        m.signal()
+        return error
+    result := s.buf[s.idx - 1]
+    s.idx -= 1
+    m.signal()
+    empty.signal()
+    return result
