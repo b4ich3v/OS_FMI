@@ -1,0 +1,23 @@
+semaphore m;
+semaphore s1;
+semaphore s2;
+int counter;
+
+m.init(1);
+s1.init(0);
+s2.init(0);
+counter = 0;
+
+process P                        process Q                        process R
+---------                        ---------                        ---------
+p1                               q1                               r1
+m.wait()                         m.wait()                         s2.wait()
+if(counter == 1) {               if(counter == 1) {               r2
+    s1.wait()                        s1.wait()                   s1.signal()
+} else {                          } else {
+    counter = 1                     counter = 1
+    s2.signal()                     s2.signal()
+}                                 }
+p2                               q2
+m.signal()                        m.signal()
+p3                               q3                               r3
