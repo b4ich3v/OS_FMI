@@ -1,10 +1,12 @@
 semaphore s1;
 semaphore s2;
 semaphore m;
+int counter;
 
 s1.init(1);
 s2.init(0);
 m.init(1);
+counter = 0;
 
 process P                        process Q
 ---------                        ---------
@@ -17,8 +19,6 @@ s2.signal()                      s2.signal()
                                  counter += 1
                                  if(counter == 3) {
                                      counter = 0
+                                     s1.signal()
                                  }
-                                 s1.signal()
                                  m.signal()
-
-
