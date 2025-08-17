@@ -10,14 +10,14 @@ s2.int(0);
 counter1 = 0;
 counter2 = 0;
 
-process P 		process Q
-p1			q1
-m.wait()   		m.wait()
-if(counter1 == 1)	if(counter2 == 1)
-{s2.signal()}		{s1.signal()}
-counter1 += 1		counter2 += 1
-m.signal()		m.signal()
-s1.wait()		s2.wait()
-s1.signal()		s2.signal()
-p2 			q2
-p3 			q3
+process P 		      process Q
+p1			            q1
+m.wait()   		      m.wait()
+if(counter1 == 1)	  if(counter2 == 1)
+{s2.signal()}		    {s1.signal()}
+counter1 += 1		    counter2 += 1
+m.signal()		      m.signal()
+s1.wait()		        s2.wait()
+s1.signal()		      s2.signal()
+p2 			            q2
+p3 			            q3
