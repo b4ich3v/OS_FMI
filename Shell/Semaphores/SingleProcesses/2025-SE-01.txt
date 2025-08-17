@@ -4,13 +4,17 @@ struct Stack(N):
     semaphore m
     semaphore empty
     semaphore full
+
 -------------------------
+
 init(s: Stack(N)):
     s.idx := 0
     m.init(1)
     empty.init(N)
     full.init(0)
+
 -------------------------
+
 peek(s: Stack(N)) -> Item:
     m.wait()
     if s.idx == 0:
@@ -18,7 +22,9 @@ peek(s: Stack(N)) -> Item:
         return error
     m.signal()
     return s.buf[s.idx - 1]
+
 -------------------------
+
 push(s: Stack(N), x: Item):
     empty.wait()
     m.wait()
@@ -29,7 +35,9 @@ push(s: Stack(N), x: Item):
     s.idx += 1
     m.signal()
     full.signal()
+
 -------------------------
+
 pop(s: Stack(N)) -> Item:
     full.wait()
     m.wait()
