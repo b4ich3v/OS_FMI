@@ -1,0 +1,10 @@
+semaphore s;
+s.init(0);
+
+process P                        process Q                        process R
+---------                        ---------                        ---------
+p1                               q1                               r1
+s.signal()                        s.wait()                        s.wait()
+s.signal()                        q2                               r2
+p2                               q3                               r3
+p3
