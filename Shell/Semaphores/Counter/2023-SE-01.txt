@@ -1,0 +1,25 @@
+semaphore m;
+semaphore s1;
+semaphore s2;
+int counter1;
+int counter2;
+
+m.init(1);
+s1.init(0);
+s2.init(0);
+counter1 = 0;
+counter2 = 0;
+
+process P                        process Q                        process R
+---------                        ---------                        ---------
+                                  s2.wait()
+                                  s2.signal()
+p_1                               q_1                               r_1
+p_2                               q_2                               r_2
+m.wait()                           m.wait()                          m.wait()
+if(counter1 == 1) {               if(counter1 == 1) {               counter2 += 1
+    s1.wait()                        s1.wait()                       if(counter2 == 3) {
+}                                 }                                  s1.signal()
+counter1 += 1                     counter1 += 1                     m.signal()
+m.signal()                        m.signal()                        
+s2.signal()                        s2.signal()                      
