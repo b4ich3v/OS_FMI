@@ -1,0 +1,26 @@
+int counter;
+semaphore m;
+semaphore s1;
+semaphore s2;
+
+counter = M;
+m.init(1);
+s1.init(0);
+s2.init(0);
+
+while true:
+    m.wait()
+    if(counter == 0) {
+        s1.signal()
+        s2.wait()
+        counter = M
+    }
+    getVaccineFromTable()
+    administerVaccineToPatient()
+    counter -= 1
+    m.signal()
+
+while true:
+    s1.wait()
+    reloadTableWithVaccines(M)
+    s2.signal()
