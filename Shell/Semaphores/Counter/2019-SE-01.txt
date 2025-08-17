@@ -1,0 +1,20 @@
+semaphore m;
+semaphore s;
+int counter;
+
+m.init(1);
+s.init(0);
+counter = 0;
+
+process P
+p1
+m.wait()
+if(counter == 3) {s.signal()}
+counter += 1
+m.signal()
+s.wait()
+s.signal()
+p2
+
+
+
