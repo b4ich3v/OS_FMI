@@ -1,0 +1,23 @@
+semaphore m;
+semaphore s;
+int counter;
+
+m.init(1);
+s.init(0);
+counter = 0;
+
+WHILE true
+    p1
+    m.wait()
+    counter += 1
+    if(counter == N) {
+        counter = 0
+        s.signal()
+    }
+    m.signal()
+    
+    s.wait()
+    s.signal()
+    
+    p2
+ENDWHILE
